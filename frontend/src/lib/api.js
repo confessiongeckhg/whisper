@@ -1,4 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL;
+// Strip any trailing slash — a trailing slash on VITE_API_URL would otherwise
+// produce double-slash URLs like https://host//api/..., which Vercel redirects,
+// and browsers refuse to follow redirects during a CORS preflight check.
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
 
 function getToken() {
   return localStorage.getItem('anon_token');
@@ -33,4 +36,5 @@ export const api = {
   getMessages: () => request('/api/messages'),
   react: (id, reaction) => request(`/api/messages/${id}/reaction`, { method: 'PATCH', body: JSON.stringify({ reaction }) }),
   deleteMessage: (id) => request(`/api/messages/${id}`, { method: 'DELETE' }),
+  deleteAccount: () => request('/api/me', { method: 'DELETE' }),
 };
