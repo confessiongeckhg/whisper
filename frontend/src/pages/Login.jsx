@@ -34,9 +34,9 @@ export default function Login() {
         <input value={username} onChange={e => setUsername(e.target.value)} required />
         <label>Password</label>
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-        <button disabled={loading}>{loading ? 'Creating…' : 'Create your inbox'}</button>
+        <button disabled={loading}>{loading ? 'Signing in…' : 'Sign in'}</button>
       </form>
-      <p className="footnote">Already have an inbox? <Link to="/login">Log in</Link></p>
+      <p className="footnote">Don't have an inbox yet? <Link to="/signup">Create one</Link></p>
     </div>
   );
 }
