@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import jwt from 'jsonwebtoken';
 import authRoutes from './routes/auth.js';
 import messageRoutes from './routes/messages.js';
+import { requireAuth } from './middleware/auth.js';
 import { prisma } from './lib/prisma.js';
 
 const app = express();
@@ -41,6 +42,13 @@ app.get('/api/me', async (req, res) => {
   } catch {
     res.status(401).json({ error: 'Invalid or expired token' });
   }
+});
+
+// DELETE /api/me — permanently deletes the account. Messages cascade-delete
+// automatically (Message.user relation is onDelete: Cascade in the schema).
+app.delete('/api/me', requireAuth, async (req, res) => {
+  await prisma.user.delete({ where: { id: req.userId } });
+  res.json({ ok: true });
 });
 
 // Central error handler — keeps stack traces out of responses
