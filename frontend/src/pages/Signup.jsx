@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { api, setToken } from '../lib/api.js';
 
 export default function Signup() {
@@ -40,6 +40,7 @@ export default function Signup() {
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="8+ characters" required minLength={8} />
         <button disabled={loading}>{loading ? 'Creating…' : 'Create your inbox'}</button>
       </form>
+      <p className="footnote">Already have an inbox? <Link to="/login">Log in</Link></p>
     </div>
   );
 }
