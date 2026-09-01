@@ -12,6 +12,7 @@ export default function Inbox() {
   const [copied, setCopied] = useState(false);
   const [sharingId, setSharingId] = useState(null);
   const [downloadHint, setDownloadHint] = useState(false);
+  const [deletingAccount, setDeletingAccount] = useState(false);
   const navigate = useNavigate();
 
   const shareLink = me ? `${window.location.origin}/u/${me.username}` : '';
@@ -99,6 +100,22 @@ export default function Inbox() {
     navigate('/');
   }
 
+  async function deleteAccount() {
+    const sure = window.confirm(
+      `Delete your account permanently?\n\nThis removes your inbox link (whisper.app/u/${me.username}) and every message in it. This cannot be undone.`
+    );
+    if (!sure) return;
+    setDeletingAccount(true);
+    try {
+      await api.deleteAccount();
+      setToken(null);
+      navigate('/');
+    } catch (err) {
+      setError(err.message);
+      setDeletingAccount(false);
+    }
+  }
+
   if (!me) return <div className="wrap"><p className="sub">loading…</p></div>;
 
   return (
@@ -149,6 +166,17 @@ export default function Inbox() {
           </div>
         </div>
       ))}
+
+      <div style={{ marginTop: 40, textAlign: 'center' }}>
+        <button
+          className="ghost small"
+          onClick={deleteAccount}
+          disabled={deletingAccount}
+          style={{ color: '#FF7396', borderColor: 'rgba(255,115,150,0.35)' }}
+        >
+          {deletingAccount ? 'Deleting…' : 'Delete account'}
+        </button>
+      </div>
     </div>
   );
 }
