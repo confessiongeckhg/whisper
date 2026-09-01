@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { api, setToken } from '../lib/api.js';
 
 export default function Login() {
@@ -34,8 +34,9 @@ export default function Login() {
         <input value={username} onChange={e => setUsername(e.target.value)} required />
         <label>Password</label>
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-        <button disabled={loading}>{loading ? 'Signing in…' : 'Sign in'}</button>
+        <button disabled={loading}>{loading ? 'Creating…' : 'Create your inbox'}</button>
       </form>
+      <p className="footnote">Already have an inbox? <Link to="/login">Log in</Link></p>
     </div>
   );
 }
