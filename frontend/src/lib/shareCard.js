@@ -217,7 +217,7 @@ export async function generateShareImage({ message, displayName, link }) {
 
   ctx.fillStyle = '#6C6488';
   ctx.font = '400 28px Inter, sans-serif';
-  ctx.fillText('tap the link in bio, or paste it above', W / 2, cardY + 220);
+  ctx.fillText('tap the link in bio', W / 2, cardY + 220);
 
   return new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 1));
 }
