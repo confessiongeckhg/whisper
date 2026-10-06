@@ -25,20 +25,28 @@ function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// Wraps text to fit maxWidth, but first respects any line breaks already in
+// the original text (e.g. someone wrote their message across several lines)
+// — each paragraph is wrapped independently, so intentional breaks never
+// get merged into one continuous flow of text.
 function wrapLines(ctx, text, maxWidth) {
-  const words = text.split(/\s+/);
+  const paragraphs = text.split(/\n+/);
   const lines = [];
-  let line = '';
-  for (const word of words) {
-    const test = line ? line + ' ' + word : word;
-    if (ctx.measureText(test).width > maxWidth && line) {
-      lines.push(line);
-      line = word;
-    } else {
-      line = test;
+  for (const para of paragraphs) {
+    const words = para.trim().split(/\s+/).filter(Boolean);
+    if (words.length === 0) continue;
+    let line = '';
+    for (const word of words) {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = test;
+      }
     }
+    if (line) lines.push(line);
   }
-  if (line) lines.push(line);
   return lines;
 }
 
